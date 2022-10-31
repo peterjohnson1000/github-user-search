@@ -1,18 +1,21 @@
+import Display from "./display";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
 function App() {
   const [user, setUser] = useState("");
-  const [button, setButton] = useState(false);
+  // const [button, setButton] = useState(false);
   const [userdata, setUserdata] = useState([]);
 
   const apicall = (e) => {
     e.preventDefault();
     axios.get(`https://api.github.com/users/${user}`).then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
       setUserdata(res.data);
     });
   };
+
+  // console.log(Object.keys(userdata));
 
   return (
     <div className="App">
@@ -27,11 +30,16 @@ function App() {
         />
         <button onClick={apicall}>Enter</button>
       </form>
-      <img className="h-32" src={userdata.avatar_url} />
-      <h1>Name: {userdata.name}</h1>
-      <h1>Username: {userdata.login}</h1>
-      <h1>Location: {userdata.location}</h1>
-      <h1>In GitHub Since: {userdata.created_at.slice(0, 10)}</h1>
+      {Object.keys(userdata).length > 0 ? (
+        <Display
+          image={userdata.avatar_url}
+          Username={userdata.login}
+          Location={userdata.location}
+          github={userdata.created_at.slice(0, 10)}
+        />
+      ) : (
+        console.log("userdata is empty!")
+      )}
     </div>
   );
 }
